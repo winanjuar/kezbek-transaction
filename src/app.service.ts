@@ -1,6 +1,6 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { firstValueFrom, NotFoundError } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class AppService {
