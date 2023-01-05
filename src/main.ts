@@ -65,5 +65,8 @@ async function bootstrap() {
   logger.log(
     `${serviceName} ready to communicate with ServicePartner via RabbitMQ`,
   );
+  logger.log(
+    `${serviceName} ready to communicate with ServicePromo via RabbitMQ`,
+  );
 }
 bootstrap();

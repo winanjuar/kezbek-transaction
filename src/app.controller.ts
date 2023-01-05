@@ -1,6 +1,7 @@
-import { Controller, Get, Logger } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AppService } from './app.service';
+import { CreateTransactionDto } from './dto/create-transaction.dto';
 
 @ApiTags('Transaction')
 @Controller({ version: '1' })
@@ -9,28 +10,18 @@ export class AppController {
   private readonly logger = new Logger(AppController.name);
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getHello() {
-    return this.appService.getHello();
+  @Get('wallet')
+  wallet() {
+    return this.appService.wallet();
   }
 
-  @Get('2')
-  getHello2() {
-    return this.appService.getHello2();
+  @Get('partnerid')
+  parnerid() {
+    return this.appService.partnerid();
   }
 
-  @Get('3')
-  getHello3() {
-    return this.appService.getHello3();
-  }
-
-  @Get('4')
-  getHello4() {
-    return this.appService.getHello4();
-  }
-
-  @Get('5')
-  getHello5() {
-    return this.appService.getHello5();
+  @Post()
+  async createTransaction(@Body() transactionDto: CreateTransactionDto) {
+    return await this.appService.createNewTransaction(transactionDto);
   }
 }
