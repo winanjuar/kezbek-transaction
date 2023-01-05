@@ -50,6 +50,38 @@ import { AppService } from './app.service';
         }),
       },
     ]),
+    ClientsModule.registerAsync([
+      {
+        name: 'LoyaltyService',
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: async (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.get<string>('RABBITMQ_URL')],
+            queue: configService.get<string>('RABBITMQ_QUEUE_LOYALTY'),
+            queueOptions: { durable: false },
+            prefetchCount: 1,
+          },
+        }),
+      },
+    ]),
+    ClientsModule.registerAsync([
+      {
+        name: 'PartnerService',
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: async (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.get<string>('RABBITMQ_URL')],
+            queue: configService.get<string>('RABBITMQ_QUEUE_PARTNER'),
+            queueOptions: { durable: false },
+            prefetchCount: 1,
+          },
+        }),
+      },
+    ]),
   ],
   controllers: [AppController],
   providers: [AppService],
