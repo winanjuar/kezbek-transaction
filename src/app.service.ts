@@ -20,6 +20,8 @@ import { IResponseInfoPromo } from './core/response-info-promo.interface';
 import { IRequestInfoPromo } from './core/request-info-promo.interface';
 import { INewTransaction } from './core/new-transaction.interface';
 import { TransactionDetailRepository } from './repository/transaction-detail.repository';
+import { IWalletData } from './core/wallet-data.interface';
+import { IMailData } from './core/mail-data.interface';
 
 @Injectable()
 export class AppService {
@@ -27,28 +29,14 @@ export class AppService {
 
   constructor(
     @Inject('CustomerService') private readonly customerClient: ClientProxy,
-    @Inject('WalletService') private readonly walletClient: ClientProxy,
     @Inject('LoyaltyService') private readonly loyaltyClient: ClientProxy,
     @Inject('PartnerService') private readonly partnerClient: ClientProxy,
     @Inject('PromoService') private readonly promoClient: ClientProxy,
+    @Inject('WalletService') private readonly walletClient: ClientProxy,
+    @Inject('MailerService') private readonly mailerClient: ClientProxy,
     private readonly transactionRepository: TransactionDetailRepository,
   ) {
     this.customerClient.connect();
-  }
-
-  async wallet(): Promise<any> {
-    const data = {
-      transaction_id: crypto.randomUUID(),
-      customer_id: crypto.randomUUID(),
-      transaction_time: new Date(),
-      transaction_type: 'IN',
-      transaction_description: 'Coba aja',
-      amount: 5000,
-    };
-    this.walletClient.emit('ep_write_wallet', data);
-    this.logger.log(
-      `[MessagePattern ep_write_wallet] [${data.transaction_id}] Data transaction sent to ServiceWallet`,
-    );
   }
 
   async partnerid(): Promise<any> {
@@ -63,6 +51,20 @@ export class AppService {
       throw new NotFoundException('gak ada');
     }
     return partner;
+  }
+
+  async __sendWallet(data: IWalletData): Promise<void> {
+    this.walletClient.emit(EPatternMessage.WRITE_WALLET, data);
+    this.logger.log(
+      `[MessagePattern ${EPatternMessage.WRITE_WALLET}] [${data.transaction_id}] Data transaction sent to ServiceWallet`,
+    );
+  }
+
+  async __sendEmail(data: IMailData): Promise<void> {
+    this.mailerClient.emit(EPatternMessage.SEND_EMAIL, data);
+    this.logger.log(
+      `[MessagePattern ${EPatternMessage.SEND_EMAIL}] [${data.transaction_id}] Data transaction sent to ServiceMailer`,
+    );
   }
 
   async __infoCustomer(
@@ -152,7 +154,7 @@ export class AppService {
           transactionDto.promo_code,
         ),
       ]);
-      const data: INewTransaction = {
+      const dataTransaction: INewTransaction = {
         transaction_id,
         transaction_time,
         customer_id: customer.id,
@@ -173,7 +175,32 @@ export class AppService {
         point_transaction: result[2].point,
         point_total: result[1].point + result[2].point,
       };
-      return await this.transactionRepository.createNewTransaction(data);
+
+      const dataWallet: IWalletData = {
+        transaction_id: dataTransaction.transaction_id,
+        transaction_time: dataTransaction.transaction_time,
+        customer_id: dataTransaction.customer_id,
+        amount: dataTransaction.point_total,
+      };
+
+      const stringCashback = dataTransaction.point_total.toLocaleString(
+        'id-ID',
+        { style: 'currency', currency: 'IDR' },
+      );
+
+      const dataEmail: IMailData = {
+        transaction_id: dataTransaction.transaction_id,
+        mail_to: dataTransaction.customer_email,
+        partner_name: dataTransaction.partner_name,
+        cashback_total: stringCashback,
+      };
+
+      await this.__sendWallet(dataWallet);
+      await this.__sendEmail(dataEmail);
+
+      return await this.transactionRepository.createNewTransaction(
+        dataTransaction,
+      );
     } else {
       throw new InternalServerErrorException();
     }

@@ -53,38 +53,6 @@ import { TransactionDetailRepository } from './repository/transaction-detail.rep
     ]),
     ClientsModule.registerAsync([
       {
-        name: 'WalletService',
-        imports: [ConfigModule],
-        inject: [ConfigService],
-        useFactory: async (configService: ConfigService) => ({
-          transport: Transport.RMQ,
-          options: {
-            urls: [configService.get<string>('RABBITMQ_URL')],
-            queue: configService.get<string>('RABBITMQ_QUEUE_WALLET'),
-            queueOptions: { durable: false },
-            prefetchCount: 1,
-          },
-        }),
-      },
-    ]),
-    ClientsModule.registerAsync([
-      {
-        name: 'LoyaltyService',
-        imports: [ConfigModule],
-        inject: [ConfigService],
-        useFactory: async (configService: ConfigService) => ({
-          transport: Transport.RMQ,
-          options: {
-            urls: [configService.get<string>('RABBITMQ_URL')],
-            queue: configService.get<string>('RABBITMQ_QUEUE_LOYALTY'),
-            queueOptions: { durable: false },
-            prefetchCount: 1,
-          },
-        }),
-      },
-    ]),
-    ClientsModule.registerAsync([
-      {
         name: 'PartnerService',
         imports: [ConfigModule],
         inject: [ConfigService],
@@ -109,6 +77,54 @@ import { TransactionDetailRepository } from './repository/transaction-detail.rep
           options: {
             urls: [configService.get<string>('RABBITMQ_URL')],
             queue: configService.get<string>('RABBITMQ_QUEUE_PROMO'),
+            queueOptions: { durable: false },
+            prefetchCount: 1,
+          },
+        }),
+      },
+    ]),
+    ClientsModule.registerAsync([
+      {
+        name: 'LoyaltyService',
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: async (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.get<string>('RABBITMQ_URL')],
+            queue: configService.get<string>('RABBITMQ_QUEUE_LOYALTY'),
+            queueOptions: { durable: false },
+            prefetchCount: 1,
+          },
+        }),
+      },
+    ]),
+    ClientsModule.registerAsync([
+      {
+        name: 'MailerService',
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: async (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.get<string>('RABBITMQ_URL')],
+            queue: configService.get<string>('RABBITMQ_QUEUE_MAILER'),
+            queueOptions: { durable: false },
+            prefetchCount: 1,
+          },
+        }),
+      },
+    ]),
+    ClientsModule.registerAsync([
+      {
+        name: 'WalletService',
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: async (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.get<string>('RABBITMQ_URL')],
+            queue: configService.get<string>('RABBITMQ_QUEUE_WALLET'),
             queueOptions: { durable: false },
             prefetchCount: 1,
           },
