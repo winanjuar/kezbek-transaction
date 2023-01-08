@@ -3,7 +3,6 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
-  NotFoundException,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
@@ -18,7 +17,7 @@ import { IResponseInfoLoyalty } from './core/response-info-loyalty.interface';
 import { IRequestInfoLoyalty } from './core/request-info-loyalty.interface';
 import { IResponseInfoPromo } from './core/response-info-promo.interface';
 import { IRequestInfoPromo } from './core/request-info-promo.interface';
-import { INewTransaction } from './core/new-transaction.interface';
+import { INewTransactionDetail } from './core/new-transaction-detail.interface';
 import { TransactionDetailRepository } from './repository/transaction-detail.repository';
 import { IWalletData } from './core/wallet-data.interface';
 import { IMailData } from './core/mail-data.interface';
@@ -37,20 +36,6 @@ export class AppService {
     private readonly transactionRepository: TransactionDetailRepository,
   ) {
     this.customerClient.connect();
-  }
-
-  async partnerid(): Promise<any> {
-    const data = {
-      transaction_id: crypto.randomUUID(),
-      partner_id: 'c5fa09b5-b255-4e6f-93fb-b407c107ceab',
-    };
-    const partner = await firstValueFrom(
-      this.partnerClient.send('mp_info_partner', data),
-    );
-    if (!partner) {
-      throw new NotFoundException('gak ada');
-    }
-    return partner;
   }
 
   async __sendWallet(data: IWalletData): Promise<void> {
@@ -154,7 +139,7 @@ export class AppService {
           transactionDto.promo_code,
         ),
       ]);
-      const dataTransaction: INewTransaction = {
+      const dataTransaction: INewTransactionDetail = {
         transaction_id,
         transaction_time,
         customer_id: customer.id,

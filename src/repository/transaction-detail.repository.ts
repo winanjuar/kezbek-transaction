@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { INewTransaction } from 'src/core/new-transaction.interface';
+import { INewTransactionDetail } from 'src/core/new-transaction-detail.interface';
 import { TransactionDetail } from 'src/entity/transaction-detail.entity';
 import { DataSource, Repository } from 'typeorm';
 
@@ -9,7 +9,7 @@ export class TransactionDetailRepository extends Repository<TransactionDetail> {
     super(TransactionDetail, dataSource.createEntityManager());
   }
 
-  async createNewTransaction(data: INewTransaction) {
+  async createNewTransaction(data: INewTransactionDetail) {
     return await this.save(data);
   }
 }

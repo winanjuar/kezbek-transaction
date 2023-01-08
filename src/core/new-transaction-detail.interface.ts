@@ -1,4 +1,4 @@
-export interface INewTransaction {
+export interface INewTransactionDetail {
   transaction_id: string;
   transaction_time: Date;
   customer_id: string;
