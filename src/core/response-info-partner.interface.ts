@@ -1,4 +1,5 @@
 export interface IResponseInfoPartner {
-  id: string;
+  transaction_id: string;
+  partner_id: string;
   name: string;
 }
