@@ -11,7 +11,9 @@ export class CreateTransactionDetailResponseDto extends BaseResponseDto {
   @ApiProperty({ example: 201 })
   statusCode: number;
 
-  @ApiProperty({ example: 'Create new partner successfully' })
+  @ApiProperty({
+    example: 'This is sample message create new entity successfully',
+  })
   message: string;
 
   @ApiProperty({ type: TransactionDetailDto })
