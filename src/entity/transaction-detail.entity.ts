@@ -12,6 +12,9 @@ export class TransactionDetail {
   @PrimaryColumn('uuid')
   transaction_id: string;
 
+  @Column({ unique: true })
+  transaction_origin_id: string;
+
   @Column()
   transaction_time: Date;
 

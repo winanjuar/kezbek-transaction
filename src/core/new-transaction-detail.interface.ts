@@ -1,5 +1,6 @@
 export interface INewTransactionDetail {
   transaction_id: string;
+  transaction_origin_id: string;
   transaction_time: Date;
   customer_id: string;
   customer_name: string;

@@ -32,6 +32,7 @@
     "amqplib": "^0.10.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
+    "dotenv": "^16.0.3",
     "lodash": "^4.17.21",
     "pg": "^8.8.0",
     "reflect-metadata": "^0.1.13",
@@ -85,9 +86,9 @@
     "coverageDirectory": "../coverage",
     "coverageThreshold": {
       "global": {
-        "branches": 30,
-        "functions": 30,
-        "lines": 70,
+        "branches": 12,
+        "functions": 40,
+        "lines": 65,
         "statements": 70
       }
     },

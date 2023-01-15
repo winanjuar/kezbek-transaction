@@ -28,6 +28,7 @@ describe('PromoConfigRepository', () => {
 
     transactionData = {
       transaction_id: faker.datatype.uuid(),
+      transaction_origin_id: faker.datatype.uuid(),
       transaction_time: new Date(),
       customer_id: faker.datatype.uuid(),
       customer_name: faker.datatype.string(),

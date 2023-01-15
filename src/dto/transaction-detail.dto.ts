@@ -7,6 +7,10 @@ export class TransactionDetailDto {
   transaction_id: string;
 
   @ApiProperty()
+  @IsString()
+  transaction_origin_id: string;
+
+  @ApiProperty()
   @IsDate()
   transaction_time: Date;
 

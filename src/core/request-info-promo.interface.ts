@@ -1,6 +1,8 @@
 export interface IRequestInfoPromo {
   transaction_id: string;
-  quantity: number;
+  transaction_time: Date;
+  customer_id: string;
+  quantity_origin: number;
   act_trx: number;
   promo_code: string;
 }
