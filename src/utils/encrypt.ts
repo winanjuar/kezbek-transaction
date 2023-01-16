@@ -4,7 +4,7 @@ import { config } from 'dotenv';
 config();
 
 const algorithm = 'aes-256-ctr';
-const password = 'S3cret';
+const password = process.env.ENCRYPT_KEY;
 
 export const encryptData = async (data: string) => {
   const iv = randomBytes(16);
